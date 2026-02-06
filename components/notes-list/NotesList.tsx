@@ -1,18 +1,29 @@
 "use client";
 
-import { addNewNote, getAllNotes } from "@/lib/actions/actions";
+import {
+  addNewNote,
+  getAllNotes,
+  getAllUserNoteTags,
+} from "@/lib/actions/actions";
 import { NewNoteSchemaType, NoteType } from "@/lib/types";
 import { useEffect, useState } from "react";
 import NoteItem from "./NoteItem";
 import { useNavContext } from "@/lib/context/NavContext";
 
 export default function NotesList() {
-  const { view } = useNavContext();
+  const { view, setNoteTags } = useNavContext();
   const [notes, setNotes] = useState<NoteType[]>([]);
 
   useEffect(() => {
     getAllNotes().then((data) => setNotes(Array.isArray(data) ? data : [data]));
   }, []);
+
+  useEffect(() => {
+    getAllUserNoteTags().then((data) => {
+      setNoteTags(Array.isArray(data) ? data : []);
+      console.log(data);
+    });
+  }, [setNoteTags]);
 
   const createNote = async () => {
     const newNote: NewNoteSchemaType = {
@@ -31,20 +42,20 @@ export default function NotesList() {
         + Create New Note
       </button>
       <div className="notes-list-content">
-        {notes && view === 'all' &&
-          notes.filter(n => n.isArchived === false).map((note: NoteType, i: number) => (
-            <NoteItem 
-                note={note} 
-                key={i} 
-            />
-          ))}
-          {notes && view === 'archived' &&
-          notes.filter(n => n.isArchived === true).map((note: NoteType, i: number) => (
-            <NoteItem 
-                note={note} 
-                key={i} 
-            />
-          ))}
+        {notes &&
+          view === "all" &&
+          notes
+            .filter((n) => n.isArchived === false)
+            .map((note: NoteType, i: number) => (
+              <NoteItem note={note} key={i} />
+            ))}
+        {notes &&
+          view === "archived" &&
+          notes
+            .filter((n) => n.isArchived === true)
+            .map((note: NoteType, i: number) => (
+              <NoteItem note={note} key={i} />
+            ))}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { NewNoteSchemaType, NewTagSchemaType, NoteType, TagType } from "../types";
+import { NewNoteSchemaType, NewTagSchemaType, NoteTagType, NoteType, TagType } from "../types";
 
 // tags
 
@@ -109,4 +109,40 @@ export async function getAllNotes() {
 
   const data = await response.json();
   return data as NoteType;
+}
+
+// notes
+
+export async function updateNoteTags(selectedTags: Set<string>, noteId: string) {
+  const response = await fetch("/api/note-tags", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      noteTags: Array.from(selectedTags),
+      noteId: noteId,
+    })
+  });
+
+  if(!response.ok) {
+    throw new Error("failed to update note tags");
+  }
+
+  const data = await response.json();
+  return data as NoteTagType;
+}
+
+export async function getAllUserNoteTags() {
+  const response = await fetch("/api/note-tags", {
+    method: "GET",
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("failed to retrieve user note tags");
+  }
+
+  const data = await response.json();
+  return data as NoteTagType;
 }

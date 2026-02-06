@@ -35,9 +35,7 @@ export default function Tag({
   const updateTagColor = (newColor: string) => {
     updateTag(tag, "color", newColor);
     setEditColor(false);
-    setTags(
-      tags.map((t) => (t.id === tag.id ? { ...t, color: newColor } : t)),
-    );
+    setTags(tags.map((t) => (t.id === tag.id ? { ...t, color: newColor } : t)));
   };
 
   return (

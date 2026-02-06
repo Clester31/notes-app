@@ -14,6 +14,11 @@ export interface NoteType {
     updatedAt: string
 }
 
+export interface NoteTagType {
+    tagId: string
+    noteId: string
+}
+
 export interface NewTagSchemaType {
     name: string
     color: string

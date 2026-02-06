@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useState } from "react";
+import { NoteTagType, NoteType, TagType } from "../types";
 
 export interface NavContextType {
   open: boolean;
@@ -11,6 +12,12 @@ export interface NavContextType {
   setPopup: (content: ReactNode) => void;
   closePopup: () => void;
   popupContent: ReactNode | null;
+  currentNote: NoteType | null;
+  setCurrentNote: (note: NoteType) => void;
+  tags: TagType[] | null;
+  setTags: (tags: TagType[] | null) => void;
+  noteTags: NoteTagType[] | null
+  setNoteTags: (noteTags: NoteTagType[] | null) => void;
 }
 
 const NavContext = createContext<NavContextType | undefined>(undefined);
@@ -24,6 +31,10 @@ export const NavProvider = ({ children }: NavContextProps) => {
   const [view, setView] = useState<'all' | 'archived'>('all');
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupContent, setPopupContent] = useState<ReactNode | null>(null);
+  const [currentNote, setCurrentNote] = useState<NoteType | null>(null);
+
+  const[tags, setTags] = useState<TagType[] | null>(null)
+  const[noteTags, setNoteTags] = useState<NoteTagType[] | null>(null)
 
   const setPopup = (content: ReactNode) => {
     setPopupContent(content);
@@ -44,6 +55,12 @@ export const NavProvider = ({ children }: NavContextProps) => {
     setPopup,
     closePopup,
     popupContent,
+    currentNote,
+    setCurrentNote,
+    tags,
+    setTags,
+    noteTags,
+    setNoteTags
   };
 
   return (

@@ -5,20 +5,29 @@ import { addNewTag, getAllTags } from "@/lib/actions/actions";
 import { TagType } from "@/lib/types";
 import Tag from "../tags/Tag";
 import { selectRandomTagColor } from "@/lib/utils";
+import { useNavContext } from "@/lib/context/NavContext";
 
 export default function SidebarTags() {
-  const [tags, setTags] = useState<TagType[]>([]);
+  const { tags, setTags } = useNavContext();
 
   useEffect(() => {
     getAllTags().then((data) => setTags(Array.isArray(data) ? data : [data]));
-  }, []);
+  }, [setTags]);
+
+  if(!tags) {
+    return (
+      <div>
+
+      </div>
+    )
+  }
 
   const createTag = async () => {
     const newTag = await addNewTag({
       name: `tag ${tags.length + 1}`,
       color: selectRandomTagColor(),
     });
-    setTags((prev) => [...prev, newTag]);
+    setTags([...tags, newTag]);
   };
 
   return (
